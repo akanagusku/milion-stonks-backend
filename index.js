@@ -29,11 +29,15 @@ app.post("/api/stocks", (req, res) => {
     "<=": Op.lte,
   };
 
-  var query;
+  var query = {
+    include: FinanceIndicator,
+    limit: 100,
+    offset: 0
+  };
+  
   if (req.body.query) {
-    query = {
-      where: {},
-    };
+    Object.defineProperty(query, 'where', {enumerable: true, writable: true, value: {}})
+    
     query.where[queryConditionMapper[req.body.query.condition]] =
       req.body.query.rules.map((rule) => {
         var obj = {};
